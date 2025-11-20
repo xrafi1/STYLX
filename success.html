@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Successful - STYLX</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .success-container { max-width: 700px; margin: 4rem auto; padding: 2rem; text-align: center; }
+        .success-box { background: white; padding: 3rem; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .success-icon { font-size: 5rem; color: #27ae60; margin-bottom: 1rem; }
+        .order-details { background: #f8f9fa; padding: 2rem; border-radius: 10px; margin: 2rem 0; text-align: left; }
+        .order-item { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #ddd; }
+        .order-item:last-child { border-bottom: none; }
+        .total-row { font-weight: bold; font-size: 1.2rem; color: #667eea; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #667eea; }
+        .button-group { margin-top: 2rem; }
+        .button-group a { display: inline-block; margin: 0 0.5rem; padding: 1rem 2rem; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .primary-btn { background: #667eea; color: white; }
+        .primary-btn:hover { background: #764ba2; }
+        .secondary-btn { background: #ecf0f1; color: #333; }
+        .secondary-btn:hover { background: #bdc3c7; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1><a href="index.html" style="color:white; text-decoration:none;">STYLX</a></h1>
+            </div>
+        </div>
+    </header>
+
+    <div class="success-container">
+        <div class="success-box">
+            <div class="success-icon">✅</div>
+            <h1>Payment Successful!</h1>
+            <p style="font-size: 1.2rem; color: #666; margin: 1rem 0;">Thank you for your order!</p>
+            
+            <div class="order-details">
+                <h2 style="margin-bottom: 1rem; color: #333;">Order Details</h2>
+                <div>
+                    <strong>Payment ID:</strong> <span id="payment-id"></span>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <strong>Order Date:</strong> <span id="order-date"></span>
+                </div>
+                
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #333;">Items Purchased</h3>
+                <div id="order-items"></div>
+                
+                <div class="order-item total-row">
+                    <span>Total Amount:</span>
+                    <span id="total-amount"></span>
+                </div>
+            </div>
+
+            <p style="color: #666; margin-top: 2rem;">
+                A confirmation email has been sent to your email address.
+            </p>
+
+            <div class="button-group">
+                <a href="index.html" class="primary-btn">Continue Shopping</a>
+                <a href="index.html" class="secondary-btn">Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 STYLX. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const order = JSON.parse(localStorage.getItem('stylx_order') || '{}');
+        
+        if (Object.keys(order).length === 0) {
+            window.location.href = 'index.html';
+        } else {
+            document.getElementById('payment-id').textContent = order.payment_id || 'N/A';
+            const orderDate = new Date(order.date);
+            document.getElementById('order-date').textContent = orderDate.toLocaleString();
+            const itemsContainer = document.getElementById('order-items');
+            itemsContainer.innerHTML = order.items.map(item => `
+                <div class="order-item">
+                    <span>${item.name}</span>
+                    <span>₹${item.price.toFixed(2)}</span>
+                </div>
+            `).join('');
+            document.getElementById('total-amount').textContent = `₹${order.total.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
